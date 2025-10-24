@@ -1,0 +1,68 @@
+
+🌳 Day’s Work — Validate a Binary Search Tree (BST)
+🧩 Problem
+
+Check whether a given binary tree is a valid Binary Search Tree (BST).
+A BST must follow:
+
+Left subtree nodes < root node
+
+Right subtree nodes > root node
+
+Both subtrees must themselves be BSTs
+
+💡 Approach
+
+Used a recursive range validation technique:
+
+Each node must satisfy (lowerbound < node->val < upperbound)
+
+Left subtree updates upperbound = root->val
+
+Right subtree updates lowerbound = root->val
+
+Used long long limits (LLONG_MIN, LLONG_MAX) to handle extreme cases safely.
+
+🧾 Code
+#include <climits>
+
+class Solution {
+public:
+    bool solve(TreeNode* root, long long lowerbound, long long upperbound) {
+        if (root == NULL)
+            return true;
+
+        bool cond1 = (root->val > lowerbound);
+        bool cond2 = (root->val < upperbound);
+
+        bool leftans = solve(root->left, lowerbound, root->val);
+        bool rightans = solve(root->right, root->val, upperbound);
+
+        return (cond1 && cond2 && leftans && rightans);
+    }
+
+    bool isValidBST(TreeNode* root) {
+        long long lowerbound = LLONG_MIN;
+        long long upperbound = LLONG_MAX;
+        return solve(root, lowerbound, upperbound);
+    }
+};
+
+🕒 Time Complexity
+
+O(N) — Each node is visited once.
+
+💾 Space Complexity
+
+O(H) — Recursion stack (where H = height of tree).
+
+✅ Learning Outcome
+
+Understood the importance of maintaining range bounds in recursive BST validation.
+
+Learned how integer overflow can occur with INT_MIN and INT_MAX, and why to use LLONG_MIN / LLONG_MAX.
+
+Reinforced concepts of recursion, BST properties, and boundary conditions.
+
+📅 Commit Message Example
+✅ Day 24: Implemented “Validate BST” using recursive bounds approach in C++
